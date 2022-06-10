@@ -22,14 +22,11 @@ public class GoldenMasterTest {
         PrintStream toRestore = System.out;
         System.setOut(stream);
         String expectedOutput = readFile("testinput");
-
-
         String[] arg = {"1"};
 
         GameRunner.main(arg);
 
         System.setOut(toRestore);
-
 
         Assertions.assertEquals(expectedOutput, outputStream.toString());
     }

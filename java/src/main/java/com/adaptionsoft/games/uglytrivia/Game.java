@@ -1,7 +1,11 @@
 package com.adaptionsoft.games.uglytrivia;
 
+import com.adaptionsoft.games.enums.Category;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import static com.adaptionsoft.games.enums.Category.*;
 
 public class Game {
     ArrayList<String> players = new ArrayList<>();
@@ -9,7 +13,7 @@ public class Game {
     int[] purses  = new int[6];
     boolean[] inPenaltyBox  = new boolean[6];
     
-    LinkedList<String> popQuestions = new LinkedList<String>();
+    LinkedList<String> popQuestions = new LinkedList<>();
     LinkedList<String> scienceQuestions = new LinkedList<>();
     LinkedList<String> sportsQuestions = new LinkedList<>();
     LinkedList<String> rockQuestions = new LinkedList<>();
@@ -66,7 +70,7 @@ public class Game {
 				System.out.println(players.get(currentPlayer) 
 						+ "'s new location is " 
 						+ places[currentPlayer]);
-				System.out.println("The category is " + currentCategory());
+				System.out.println("The category is " + currentCategory().getName());
 				askQuestion();
 			} else {
 				System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
@@ -81,7 +85,7 @@ public class Game {
 			System.out.println(players.get(currentPlayer) 
 					+ "'s new location is " 
 					+ places[currentPlayer]);
-			System.out.println("The category is " + currentCategory());
+			System.out.println("The category is " + currentCategory().getName());
 			askQuestion();
 		}
 		
@@ -95,30 +99,29 @@ public class Game {
 
 	private String extractNextQuestion() {
 		switch (currentCategory()) {
-			case "Pop":
+			case POP:
 				return popQuestions.removeFirst();
-			case "Science":
+			case SCIENCE:
 				return scienceQuestions.removeFirst();
-			case "Sports":
+			case SPORTS:
 				return sportsQuestions.removeFirst();
-			case "Rock":
+			case ROCK:
 				return rockQuestions.removeFirst();
 			default:
 				throw new IllegalStateException("Angelo's fault");
 		}
 	}
 
-
-	private String currentCategory() {
+	private Category currentCategory() {
 		switch (places[currentPlayer] % 4) {
 			case 0:
-				return "Pop";
+				return POP;
 			case 1:
-				return "Science";
+				return SCIENCE;
 			case 2:
-				return "Sports";
+				return SPORTS;
 			case 3:
-				return "Rock";
+				return ROCK;
 			default:
 				throw new IllegalStateException("Angelo's fault");
 		}
@@ -162,7 +165,6 @@ public class Game {
 		if (currentPlayer == players.size()) currentPlayer = 0;
 		return true;
 	}
-
 
 	private boolean didPlayerWin() {
 		return !(purses[currentPlayer] == 6);
