@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Game {
-    ArrayList players = new ArrayList();
+    ArrayList<String> players = new ArrayList<>();
     int[] places = new int[6];
     int[] purses  = new int[6];
     boolean[] inPenaltyBox  = new boolean[6];
     
-    LinkedList popQuestions = new LinkedList();
-    LinkedList scienceQuestions = new LinkedList();
-    LinkedList sportsQuestions = new LinkedList();
-    LinkedList rockQuestions = new LinkedList();
+    LinkedList<String> popQuestions = new LinkedList<String>();
+    LinkedList<String> scienceQuestions = new LinkedList<>();
+    LinkedList<String> sportsQuestions = new LinkedList<>();
+    LinkedList<String> rockQuestions = new LinkedList<>();
     
     int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
@@ -88,17 +88,27 @@ public class Game {
 	}
 
 	private void askQuestion() {
-		if (currentCategory() == "Pop")
-			System.out.println(popQuestions.removeFirst());
-		if (currentCategory() == "Science")
-			System.out.println(scienceQuestions.removeFirst());
-		if (currentCategory() == "Sports")
-			System.out.println(sportsQuestions.removeFirst());
-		if (currentCategory() == "Rock")
-			System.out.println(rockQuestions.removeFirst());		
+		String questionExtracted = extractNextQuestion();
+
+		System.out.println(questionExtracted);
 	}
-	
-	
+
+	private String extractNextQuestion() {
+		switch (currentCategory()) {
+			case "Pop":
+				return popQuestions.removeFirst();
+			case "Science":
+				return scienceQuestions.removeFirst();
+			case "Sports":
+				return sportsQuestions.removeFirst();
+			case "Rock":
+				return rockQuestions.removeFirst();
+			default:
+				throw new IllegalStateException("Angelo's fault");
+		}
+	}
+
+
 	private String currentCategory() {
 		if (places[currentPlayer] == 0) return "Pop";
 		if (places[currentPlayer] == 4) return "Pop";
