@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.uglytrivia;
 
+import com.adaptionsoft.games.domain.Deck;
 import com.adaptionsoft.games.enums.Category;
 
 import java.util.ArrayList;
@@ -8,7 +9,11 @@ import java.util.LinkedList;
 import static com.adaptionsoft.games.enums.Category.*;
 
 public class Game {
-    ArrayList<String> players = new ArrayList<>();
+	public static final int MAX_QUESTIONS_NUMBER = 50;
+
+	Deck deck; // TODO: Make this more extensible
+
+	ArrayList<String> players = new ArrayList<>();
     int[] places = new int[6];
     int[] purses  = new int[6];
     boolean[] inPenaltyBox  = new boolean[6];
@@ -22,16 +27,18 @@ public class Game {
     boolean isGettingOutOfPenaltyBox;
     
     public  Game(){
-    	for (int i = 0; i < 50; i++) {
-			popQuestions.addLast("Pop Question " + i);
-			scienceQuestions.addLast(("Science Question " + i));
-			sportsQuestions.addLast(("Sports Question " + i));
-			rockQuestions.addLast(createRockQuestion(i));
+    	for (int i = 0; i < MAX_QUESTIONS_NUMBER; i++) {
+			popQuestions.addLast(createCategoryQuestion(i, POP));
+			scienceQuestions.addLast(createCategoryQuestion(i, SCIENCE));
+			sportsQuestions.addLast(createCategoryQuestion(i, SPORTS));
+			rockQuestions.addLast(createCategoryQuestion(i, ROCK));
     	}
+
+		deck = new Deck(MAX_QUESTIONS_NUMBER);
     }
 
-	public String createRockQuestion(int index){
-		return "Rock Question " + index;
+	private String createCategoryQuestion(int index, Category category){
+		return String.format("%s Question %d", category.getName(),index);
 	}
 	
 	public boolean isPlayable() {
@@ -98,18 +105,7 @@ public class Game {
 	}
 
 	private String extractNextQuestion() {
-		switch (currentCategory()) {
-			case POP:
-				return popQuestions.removeFirst();
-			case SCIENCE:
-				return scienceQuestions.removeFirst();
-			case SPORTS:
-				return sportsQuestions.removeFirst();
-			case ROCK:
-				return rockQuestions.removeFirst();
-			default:
-				throw new IllegalStateException("Angelo's fault");
-		}
+		return deck.getNextQuestion(currentCategory());
 	}
 
 	private Category currentCategory() {
