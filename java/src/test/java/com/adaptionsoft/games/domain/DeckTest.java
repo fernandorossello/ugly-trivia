@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.trivia.domain;
+package com.adaptionsoft.games.domain;
 
 import com.adaptionsoft.games.domain.Deck;
 import com.adaptionsoft.games.enums.Category;
