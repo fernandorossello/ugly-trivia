@@ -6,28 +6,26 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import static com.adaptionsoft.games.enums.Category.*;
-import static com.adaptionsoft.games.enums.Category.ROCK;
+import static com.adaptionsoft.games.enums.Category.values;
 
 public class Deck {
 
-    Map<Category,LinkedList<String>> categoryCards = new HashMap<>();
+    Map<Category, LinkedList<String>> categoryCards = new HashMap<>();
 
     public Deck(int numberOfQuestionsByCategory) {
-        categoryCards.put(POP,new LinkedList<>());
-        categoryCards.put(SCIENCE,new LinkedList<>());
-        categoryCards.put(SPORTS,new LinkedList<>());
-        categoryCards.put(ROCK,new LinkedList<>());
+        //TODO: Be able to configure from outside the categories
+        for (Category category : values()) {
+            categoryCards.put(category, new LinkedList<>());
+        }
 
         for (int i = 0; i < numberOfQuestionsByCategory; i++) {
-            categoryCards.get(POP).add(createCategoryQuestion(i, POP));
-            categoryCards.get(SCIENCE).add(createCategoryQuestion(i, SCIENCE));
-            categoryCards.get(SPORTS).add(createCategoryQuestion(i, SPORTS));
-            categoryCards.get(ROCK).add(createCategoryQuestion(i, ROCK));
+            for (Category category : values()) {
+                categoryCards.get(category).add(createCategoryQuestion(i, category));
+            }
         }
     }
 
-    private String createCategoryQuestion(int index, Category category){
+    private String createCategoryQuestion(int index, Category category) {
         return String.format("%s Question %d", category.getName(), index);
     }
 
