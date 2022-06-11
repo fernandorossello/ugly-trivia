@@ -11,10 +11,6 @@ import static com.adaptionsoft.games.enums.Category.ROCK;
 
 public class Deck {
 
-    LinkedList<String> popQuestions = new LinkedList<>();
-    LinkedList<String> scienceQuestions = new LinkedList<>();
-    LinkedList<String> sportsQuestions = new LinkedList<>();
-    LinkedList<String> rockQuestions = new LinkedList<>();
     Map<Category,LinkedList<String>> categoryCards = new HashMap<>();
 
     public Deck(int numberOfQuestionsByCategory) {
@@ -28,11 +24,6 @@ public class Deck {
             categoryCards.get(SCIENCE).add(createCategoryQuestion(i, SCIENCE));
             categoryCards.get(SPORTS).add(createCategoryQuestion(i, SPORTS));
             categoryCards.get(ROCK).add(createCategoryQuestion(i, ROCK));
-
-            popQuestions.addLast(createCategoryQuestion(i, POP));
-            scienceQuestions.addLast(createCategoryQuestion(i, SCIENCE));
-            sportsQuestions.addLast(createCategoryQuestion(i, SPORTS));
-            rockQuestions.addLast(createCategoryQuestion(i, ROCK));
         }
     }
 
