@@ -30,4 +30,20 @@ public class GoldenMasterTest {
 
         Assertions.assertEquals(expectedOutput, outputStream.toString());
     }
+
+    @Test
+    public void test_golden_master_2() throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream stream = new PrintStream(outputStream);
+        PrintStream toRestore = System.out;
+        System.setOut(stream);
+        String expectedOutput = readFile("testinput2");
+        String[] arg = {"2"};
+
+        GameRunner.main(arg);
+
+        System.setOut(toRestore);
+
+        Assertions.assertEquals(expectedOutput, outputStream.toString());
+    }
 }

@@ -36,6 +36,7 @@ public class Board {
 
     public void removeFromPenalizeBox(Player player) {
         penalizedPlayers.remove(player);
+        System.out.println(player.getName() + " is getting out of the penalty box");
     }
 
     int getPlayerPosition(Player player) {

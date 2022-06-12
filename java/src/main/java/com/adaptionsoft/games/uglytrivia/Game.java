@@ -8,15 +8,12 @@ import java.util.List;
 
 public class Game {
     public static final int MAX_QUESTIONS_NUMBER = 50;
-    public static final int COINS_TO_WIN = 6;
 
     private Deck deck; // TODO: Make this more extensible. Use a factory for the Deck
     private Board board;// TODO: Make this more extensible. Use a factory for the Board
     private Players players = new Players();
     private final List<WinningRule> winningRules = new ArrayList<>();
     private Randomizer randomizer;
-
-    boolean isGettingOutOfPenaltyBox;
 
     public Game() {
         deck = new Deck(MAX_QUESTIONS_NUMBER);
@@ -38,7 +35,7 @@ public class Game {
 
         managePenaltyStatus(roll);
 
-        if (!isCurrentPlayerInPenaltyBox() || isGettingOutOfPenaltyBox) {
+        if (!isCurrentPlayerInPenaltyBox()) {
             moveCurrentPlayer(roll);
             askQuestion();
         }
@@ -47,17 +44,16 @@ public class Game {
     private void managePenaltyStatus(int roll) {
         if (isCurrentPlayerInPenaltyBox()) {
             if (shouldGoOutFromPenaltyBox(roll)) {
-                isGettingOutOfPenaltyBox = true;
-                System.out.println(players.getCurrentPlayer().getName() + " is getting out of the penalty box");
+                board.removeFromPenalizeBox(players.getCurrentPlayer());
             } else {
                 System.out.println(players.getCurrentPlayer().getName() + " is not getting out of the penalty box");
-                isGettingOutOfPenaltyBox = false;
             }
         }
     }
 
     public void wasCorrectlyAnswered() {
-        if (!isCurrentPlayerInPenaltyBox() || isGettingOutOfPenaltyBox) {
+        //TODO: Si está en penalty box, ni debería preguntarsele
+        if (!isCurrentPlayerInPenaltyBox()) {
             System.out.println("Answer was correct!!!!");
             incrementGoldCoinsForCurrentPlayer();
         }
