@@ -3,12 +3,10 @@ package com.adaptionsoft.games.domain;
 public class Player {
     private final String name;
     private int coins;
-    private int position; // TODO: Pareciera ser ajeno al player. Tablero quizá?
 
     public Player(String name) {
         this.name = name;
         this.coins = 0;
-        this.position = 0;
     }
 
     public void earnCoin() {
