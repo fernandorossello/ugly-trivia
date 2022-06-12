@@ -11,6 +11,7 @@ import static com.adaptionsoft.games.enums.Category.*;
 
 public class Game {
     public static final int MAX_QUESTIONS_NUMBER = 50;
+    public static final int COINS_TO_WIN = 6;
 
     Deck deck; // TODO: Make this more extensible. Use a factory for the Deck
     Board board;// TODO: Make this more extensible. Use a factory for the Board
@@ -45,16 +46,11 @@ public class Game {
         System.out.println("They have rolled a " + roll);
 
         if (isCurrentPlayerInPenaltyBox()) {
-            if (roll % 2 != 0) {
+            if (shouldGoOutFromPenaltyBox(roll)) {
                 isGettingOutOfPenaltyBox = true;
-
                 System.out.println(playersOld.get(currentPlayer) + " is getting out of the penalty box");
-                places[currentPlayer] = places[currentPlayer] + roll;
-                if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
-                System.out.println(playersOld.get(currentPlayer)
-                        + "'s new location is "
-                        + places[currentPlayer]);
+                moveCurrentPlayer(roll);
                 System.out.println("The category is " + currentCategory().getName());
                 askQuestion();
             } else {
@@ -63,17 +59,39 @@ public class Game {
             }
 
         } else {
-
-            places[currentPlayer] = places[currentPlayer] + roll;
-            if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-
-            System.out.println(playersOld.get(currentPlayer)
-                    + "'s new location is "
-                    + places[currentPlayer]);
+            moveCurrentPlayer(roll);
             System.out.println("The category is " + currentCategory().getName());
             askQuestion();
         }
+    }
 
+    public boolean wasCorrectlyAnswered() {
+        if (isCurrentPlayerInPenaltyBox() && !isGettingOutOfPenaltyBox) {
+            giveNextPlayerTurn();
+            return false;
+        } else {
+
+            System.out.println("Answer was correct!!!!");
+            incrementGoldCoinsForCurrentPlayer();
+
+            boolean winner = didPlayerWin();
+            giveNextPlayerTurn();
+
+            return winner;
+        }
+    }
+
+    private boolean shouldGoOutFromPenaltyBox(int roll) {
+        return roll % 2 != 0;
+    }
+
+    private void moveCurrentPlayer(int roll) {
+        places[currentPlayer] = places[currentPlayer] + roll;
+        if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
+
+        System.out.println(playersOld.get(currentPlayer)
+                + "'s new location is "
+                + places[currentPlayer]);
     }
 
     private void askQuestion() {
@@ -98,31 +116,16 @@ public class Game {
         }
     }
 
-    public boolean wasCorrectlyAnswered() {
-        if (isCurrentPlayerInPenaltyBox() && !isGettingOutOfPenaltyBox) {
-            giveNextPlayerTurn();
-            return true;
-        } else {
-            System.out.println("Answer was correct!!!!");
-            incrementGoldCoinsForCurrentPlayer();
-
-            boolean winner = didPlayerWin();
-            giveNextPlayerTurn();
-
-            return winner;
-        }
-    }
-
     public boolean wrongAnswer() {
         System.out.println("Question was incorrectly answered");
         moveCurrentPlayerToPenaltyBox();
 
         giveNextPlayerTurn();
-        return true;
+        return false;
     }
 
     private boolean didPlayerWin() {
-        return players.getCurrentPlayer().getCoins() != 6;
+        return players.getCurrentPlayer().getCoins() == COINS_TO_WIN;
     }
 
     private void giveNextPlayerTurn() {
