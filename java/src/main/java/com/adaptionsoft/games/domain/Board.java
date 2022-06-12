@@ -1,9 +1,14 @@
 package com.adaptionsoft.games.domain;
 
+import com.adaptionsoft.games.enums.Category;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static com.adaptionsoft.games.enums.Category.*;
+import static com.adaptionsoft.games.enums.Category.ROCK;
 
 public class Board {
 
@@ -33,7 +38,7 @@ public class Board {
         penalizedPlayers.remove(player);
     }
 
-    public int getPlayerPosition(Player player) {
+    int getPlayerPosition(Player player) {
         return playersPositions.get(player);
     }
 
@@ -42,5 +47,20 @@ public class Board {
         playersPositions.put(player, nextPosition);
 
         System.out.println(player.getName() + "'s new location is " + nextPosition);
+    }
+
+    public Category getCategory(Player player) {
+        switch (getPlayerPosition(player) % 4) {
+            case 0:
+                return POP;
+            case 1:
+                return SCIENCE;
+            case 2:
+                return SPORTS;
+            case 3:
+                return ROCK;
+            default:
+                throw new IllegalStateException("Angelo's fault");
+        }
     }
 }

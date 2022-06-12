@@ -100,18 +100,7 @@ public class Game {
     }
 
     private Category currentCategory() {
-        switch (places[currentPlayer] % 4) {
-            case 0:
-                return POP;
-            case 1:
-                return SCIENCE;
-            case 2:
-                return SPORTS;
-            case 3:
-                return ROCK;
-            default:
-                throw new IllegalStateException("Angelo's fault");
-        }
+        return board.getCategory(players.getCurrentPlayer());
     }
 
     public boolean wrongAnswer() {
