@@ -41,7 +41,7 @@ public class Game {
     }
 
     public void roll(int roll) {
-        System.out.println(playersOld.get(currentPlayer) + " is the current player");
+        System.out.println(players.getCurrentPlayer().getName() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
         if (board.isInPenaltyBox(players.getCurrentPlayer())) {
