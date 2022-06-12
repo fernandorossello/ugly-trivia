@@ -13,7 +13,8 @@ public class Game {
     private Deck deck; // TODO: Make this more extensible. Use a factory for the Deck
     private Board board;// TODO: Make this more extensible. Use a factory for the Board
     private Players players = new Players();
-    private  final List<WinningRule> winningRules = new ArrayList<>();
+    private final List<WinningRule> winningRules = new ArrayList<>();
+    private Randomizer randomizer;
 
     boolean isGettingOutOfPenaltyBox;
 
@@ -30,9 +31,10 @@ public class Game {
         return (players.howMany() >= 2);
     }
 
-    public void playTurn(int roll) {
+    public void playTurn() {
         System.out.println(players.getCurrentPlayer().getName() + " is the current player");
-        System.out.println("They have rolled a " + roll);
+
+        int roll = randomizer.roll();
 
         if (isCurrentPlayerInPenaltyBox()) {
             if (shouldGoOutFromPenaltyBox(roll)) {
@@ -40,7 +42,6 @@ public class Game {
                 System.out.println(players.getCurrentPlayer().getName() + " is getting out of the penalty box");
 
                 moveCurrentPlayer(roll);
-
                 askQuestion();
             } else {
                 System.out.println(players.getCurrentPlayer().getName() + " is not getting out of the penalty box");
@@ -49,7 +50,6 @@ public class Game {
 
         } else {
             moveCurrentPlayer(roll);
-
             askQuestion();
         }
     }
@@ -109,5 +109,9 @@ public class Game {
 
     public boolean hasCurrentPlayerWon() {
         return winningRules.stream().anyMatch(r -> r.hasWon(players.getCurrentPlayer()));
+    }
+
+    public void addRandomizer(Randomizer randomizer) {
+        this.randomizer = randomizer;
     }
 }

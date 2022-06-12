@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.adaptionsoft.games.domain.Dice;
+import com.adaptionsoft.games.domain.Randomizer;
 import com.adaptionsoft.games.domain.WinningRule;
 import com.adaptionsoft.games.domain.WinningRuleByCoins;
 import com.adaptionsoft.games.uglytrivia.Game;
@@ -29,8 +31,12 @@ public class GameRunner {
             rand = new Random(Long.parseLong(args[0]));
         }
 
+        Randomizer randomizer = Dice.builder().random(rand).sides(6).build();
+        aGame.addRandomizer(randomizer);
+
+
         do {
-            aGame.playTurn(rand.nextInt(5) + 1);
+            aGame.playTurn();
 
             if (rand.nextInt(9) == 7) {
                 aGame.wrongAnswer();
