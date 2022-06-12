@@ -36,21 +36,23 @@ public class Game {
 
         int roll = randomizer.roll();
 
+        managePenaltyStatus(roll);
+
+        if (!isCurrentPlayerInPenaltyBox() || isGettingOutOfPenaltyBox) {
+            moveCurrentPlayer(roll);
+            askQuestion();
+        }
+    }
+
+    private void managePenaltyStatus(int roll) {
         if (isCurrentPlayerInPenaltyBox()) {
             if (shouldGoOutFromPenaltyBox(roll)) {
                 isGettingOutOfPenaltyBox = true;
                 System.out.println(players.getCurrentPlayer().getName() + " is getting out of the penalty box");
-
-                moveCurrentPlayer(roll);
-                askQuestion();
             } else {
                 System.out.println(players.getCurrentPlayer().getName() + " is not getting out of the penalty box");
                 isGettingOutOfPenaltyBox = false;
             }
-
-        } else {
-            moveCurrentPlayer(roll);
-            askQuestion();
         }
     }
 
