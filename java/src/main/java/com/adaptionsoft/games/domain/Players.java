@@ -9,11 +9,14 @@ public class Players {
     public Players() {
     }
 
-    public void addPlayer(String playerName) {
-        players.add(new Player(playerName));
+    public Player addPlayer(String playerName) {
+        Player player = new Player(playerName);
+        players.add(player);
 
-        System.out.println(playerName + " was added");
+        System.out.println(player.getName() + " was added");
         System.out.println("They are player number " + this.howMany());
+
+        return player;
     }
 
     public int howMany() {

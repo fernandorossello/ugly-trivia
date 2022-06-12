@@ -2,6 +2,7 @@ package com.adaptionsoft.games.uglytrivia;
 
 import com.adaptionsoft.games.domain.Board;
 import com.adaptionsoft.games.domain.Deck;
+import com.adaptionsoft.games.domain.Player;
 import com.adaptionsoft.games.domain.Players;
 import com.adaptionsoft.games.enums.Category;
 
@@ -38,7 +39,8 @@ public class Game {
         // TODO: Esto podría moverse al board
         places[players.howMany()] = 0;
 
-        players.addPlayer(playerName);
+        Player player = players.addPlayer(playerName);
+        board.addPlayer(player);
     }
 
     public void roll(int roll) {
@@ -70,7 +72,6 @@ public class Game {
             giveNextPlayerTurn();
             return false;
         } else {
-
             System.out.println("Answer was correct!!!!");
             incrementGoldCoinsForCurrentPlayer();
 
@@ -89,9 +90,7 @@ public class Game {
         places[currentPlayer] = places[currentPlayer] + roll;
         if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
 
-        System.out.println(playersOld.get(currentPlayer)
-                + "'s new location is "
-                + places[currentPlayer]);
+        board.movePlayer(players.getCurrentPlayer(), roll);
     }
 
     private void askQuestion() {
@@ -101,7 +100,6 @@ public class Game {
     }
 
     private Category currentCategory() {
-        // TODO: Esto se podría mover al board
         switch (places[currentPlayer] % 4) {
             case 0:
                 return POP;

@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class BoardTest {
 
     Board board;
+    Player testPlayer = new Player("TestPlayer");
 
     @BeforeEach
     void setup() {
@@ -18,15 +19,11 @@ public class BoardTest {
 
     @Test
     void testPlayerNotInPenaltyBox() {
-        Player testPlayer = new Player("TestPlayer");
-
         Assertions.assertFalse(board.isInPenaltyBox(testPlayer));
     }
 
     @Test
     void testPlayerInPenaltyBox() {
-        Player testPlayer = new Player("TestPlayer");
-
         board.moveToPenalizeBox(testPlayer);
 
         Assertions.assertTrue(board.isInPenaltyBox(testPlayer));
@@ -34,8 +31,6 @@ public class BoardTest {
 
     @Test
     void testPlayerNotInPenaltyBoxAfterBeingRemoved() {
-        Player testPlayer = new Player("TestPlayer");
-
         board.moveToPenalizeBox(testPlayer);
 
         Assertions.assertTrue(board.isInPenaltyBox(testPlayer));
@@ -43,5 +38,12 @@ public class BoardTest {
         board.removeFromPenalizeBox(testPlayer);
 
         Assertions.assertFalse(board.isInPenaltyBox(testPlayer));
+    }
+
+    @Test
+    void addPlayerPutsPlayerInTheStartingPosition() {
+        board.addPlayer(testPlayer);
+
+        Assertions.assertEquals(0, board.getPlayerPosition(testPlayer));
     }
 }

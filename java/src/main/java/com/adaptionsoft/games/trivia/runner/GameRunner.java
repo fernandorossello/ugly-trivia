@@ -30,6 +30,7 @@ public class GameRunner {
             if (rand.nextInt(9) == 7) {
                 hasWon = aGame.wrongAnswer();
             } else {
+                //TODO: Extract winning logic from answering questions
                 hasWon = aGame.wasCorrectlyAnswered();
             }
 
