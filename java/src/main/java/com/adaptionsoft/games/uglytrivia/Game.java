@@ -1,23 +1,19 @@
 package com.adaptionsoft.games.uglytrivia;
 
-import com.adaptionsoft.games.domain.Board;
-import com.adaptionsoft.games.domain.Deck;
-import com.adaptionsoft.games.domain.Player;
-import com.adaptionsoft.games.domain.Players;
+import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.enums.Category;
 
 import java.util.ArrayList;
-
-import static com.adaptionsoft.games.enums.Category.*;
+import java.util.List;
 
 public class Game {
     public static final int MAX_QUESTIONS_NUMBER = 50;
     public static final int COINS_TO_WIN = 6;
 
-    Deck deck; // TODO: Make this more extensible. Use a factory for the Deck
-    Board board;// TODO: Make this more extensible. Use a factory for the Board
-
-    Players players = new Players();
+    private Deck deck; // TODO: Make this more extensible. Use a factory for the Deck
+    private Board board;// TODO: Make this more extensible. Use a factory for the Board
+    private Players players = new Players();
+    private  final List<WinningRule> winningRules = new ArrayList<>();
 
     boolean isGettingOutOfPenaltyBox;
 
@@ -26,16 +22,15 @@ public class Game {
         board = new Board();
     }
 
+    public void addWinningRule(WinningRule rule) {
+        this.winningRules.add(rule);
+    }
+
     public boolean isPlayable() {
         return (players.howMany() >= 2);
     }
 
-    public void addPlayer(String playerName) {
-        Player player = players.addPlayer(playerName);
-        board.addPlayer(player);
-    }
-
-    public void roll(int roll) {
+    public void playTurn(int roll) {
         System.out.println(players.getCurrentPlayer().getName() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
@@ -59,18 +54,10 @@ public class Game {
         }
     }
 
-    public boolean wasCorrectlyAnswered() {
-        if (isCurrentPlayerInPenaltyBox() && !isGettingOutOfPenaltyBox) {
-            giveNextPlayerTurn();
-            return false;
-        } else {
+    public void wasCorrectlyAnswered() {
+        if (!isCurrentPlayerInPenaltyBox() || isGettingOutOfPenaltyBox) {
             System.out.println("Answer was correct!!!!");
             incrementGoldCoinsForCurrentPlayer();
-
-            boolean winner = didPlayerWin();
-            giveNextPlayerTurn();
-
-            return winner;
         }
     }
 
@@ -82,12 +69,9 @@ public class Game {
         System.out.println(questionExtracted);
     }
 
-    public boolean wrongAnswer() {
+    public void wrongAnswer() {
         System.out.println("Question was incorrectly answered");
         moveCurrentPlayerToPenaltyBox();
-
-        giveNextPlayerTurn();
-        return false;
     }
 
     private boolean shouldGoOutFromPenaltyBox(int roll) {
@@ -102,11 +86,7 @@ public class Game {
         return board.getCategory(players.getCurrentPlayer());
     }
 
-    private boolean didPlayerWin() {
-        return players.getCurrentPlayer().getCoins() == COINS_TO_WIN;
-    }
-
-    private void giveNextPlayerTurn() {
+    public void giveNextPlayerTurn() {
         players.giveNextPlayerTurn();
     }
 
@@ -120,5 +100,14 @@ public class Game {
 
     private boolean isCurrentPlayerInPenaltyBox() {
         return board.isInPenaltyBox(players.getCurrentPlayer());
+    }
+
+    public void addPlayer(String playerName) {
+        Player player = players.addPlayer(playerName);
+        board.addPlayer(player);
+    }
+
+    public boolean hasCurrentPlayerWon() {
+        return winningRules.stream().anyMatch(r -> r.hasWon(players.getCurrentPlayer()));
     }
 }

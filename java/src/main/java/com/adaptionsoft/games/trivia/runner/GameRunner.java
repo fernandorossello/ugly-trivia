@@ -1,8 +1,12 @@
 
 package com.adaptionsoft.games.trivia.runner;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import com.adaptionsoft.games.domain.WinningRule;
+import com.adaptionsoft.games.domain.WinningRuleByCoins;
 import com.adaptionsoft.games.uglytrivia.Game;
 
 
@@ -17,6 +21,7 @@ public class GameRunner {
         aGame.addPlayer("Pat");
         aGame.addPlayer("Sue");
 
+        aGame.addWinningRule(new WinningRuleByCoins());
 
         Random rand = new Random();
         if (args.length > 0) {
@@ -24,17 +29,19 @@ public class GameRunner {
         }
 
         do {
-
-            aGame.roll(rand.nextInt(5) + 1);
+            aGame.playTurn(rand.nextInt(5) + 1);
 
             if (rand.nextInt(9) == 7) {
-                hasWon = aGame.wrongAnswer();
+                aGame.wrongAnswer();
             } else {
-                //TODO: Extract winning logic from answering questions
-                hasWon = aGame.wasCorrectlyAnswered();
+                aGame.wasCorrectlyAnswered();
             }
 
-        } while (!hasWon);
+            hasWon = aGame.hasCurrentPlayerWon();
 
+            aGame.giveNextPlayerTurn();
+
+        } while (!hasWon);
     }
+
 }
