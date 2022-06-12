@@ -20,8 +20,6 @@ public class Game {
     ArrayList<String> playersOld = new ArrayList<>();
     Players players = new Players();
 
-    int[] places = new int[6];
-
     int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
@@ -36,8 +34,6 @@ public class Game {
 
     public void addPlayer(String playerName) {
         playersOld.add(playerName);
-        // TODO: Esto podría moverse al board
-        places[players.howMany()] = 0;
 
         Player player = players.addPlayer(playerName);
         board.addPlayer(player);
@@ -53,7 +49,7 @@ public class Game {
                 System.out.println(playersOld.get(currentPlayer) + " is getting out of the penalty box");
 
                 moveCurrentPlayer(roll);
-                System.out.println("The category is " + currentCategory().getName());
+
                 askQuestion();
             } else {
                 System.out.println(playersOld.get(currentPlayer) + " is not getting out of the penalty box");
@@ -62,7 +58,7 @@ public class Game {
 
         } else {
             moveCurrentPlayer(roll);
-            System.out.println("The category is " + currentCategory().getName());
+
             askQuestion();
         }
     }
@@ -87,15 +83,14 @@ public class Game {
     }
 
     private void moveCurrentPlayer(int roll) {
-        places[currentPlayer] = places[currentPlayer] + roll;
-        if (places[currentPlayer] > 11) places[currentPlayer] = places[currentPlayer] - 12;
-
         board.movePlayer(players.getCurrentPlayer(), roll);
     }
 
     private void askQuestion() {
-        String questionExtracted = deck.getNextQuestion(currentCategory());
+        Category currentCategory = currentCategory();
 
+        String questionExtracted = deck.getNextQuestion(currentCategory);
+        System.out.println("The category is " + currentCategory.getName());
         System.out.println(questionExtracted);
     }
 
