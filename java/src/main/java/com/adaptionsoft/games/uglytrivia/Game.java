@@ -17,10 +17,8 @@ public class Game {
     Deck deck; // TODO: Make this more extensible. Use a factory for the Deck
     Board board;// TODO: Make this more extensible. Use a factory for the Board
 
-    ArrayList<String> playersOld = new ArrayList<>();
     Players players = new Players();
 
-    int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
 
     public Game() {
@@ -33,8 +31,6 @@ public class Game {
     }
 
     public void addPlayer(String playerName) {
-        playersOld.add(playerName);
-
         Player player = players.addPlayer(playerName);
         board.addPlayer(player);
     }
@@ -46,13 +42,13 @@ public class Game {
         if (isCurrentPlayerInPenaltyBox()) {
             if (shouldGoOutFromPenaltyBox(roll)) {
                 isGettingOutOfPenaltyBox = true;
-                System.out.println(playersOld.get(currentPlayer) + " is getting out of the penalty box");
+                System.out.println(players.getCurrentPlayer().getName() + " is getting out of the penalty box");
 
                 moveCurrentPlayer(roll);
 
                 askQuestion();
             } else {
-                System.out.println(playersOld.get(currentPlayer) + " is not getting out of the penalty box");
+                System.out.println(players.getCurrentPlayer().getName() + " is not getting out of the penalty box");
                 isGettingOutOfPenaltyBox = false;
             }
 
@@ -78,24 +74,12 @@ public class Game {
         }
     }
 
-    private boolean shouldGoOutFromPenaltyBox(int roll) {
-        return roll % 2 != 0;
-    }
-
-    private void moveCurrentPlayer(int roll) {
-        board.movePlayer(players.getCurrentPlayer(), roll);
-    }
-
     private void askQuestion() {
         Category currentCategory = currentCategory();
 
         String questionExtracted = deck.getNextQuestion(currentCategory);
         System.out.println("The category is " + currentCategory.getName());
         System.out.println(questionExtracted);
-    }
-
-    private Category currentCategory() {
-        return board.getCategory(players.getCurrentPlayer());
     }
 
     public boolean wrongAnswer() {
@@ -106,14 +90,23 @@ public class Game {
         return false;
     }
 
+    private boolean shouldGoOutFromPenaltyBox(int roll) {
+        return roll % 2 != 0;
+    }
+
+    private void moveCurrentPlayer(int roll) {
+        board.movePlayer(players.getCurrentPlayer(), roll);
+    }
+
+    private Category currentCategory() {
+        return board.getCategory(players.getCurrentPlayer());
+    }
+
     private boolean didPlayerWin() {
         return players.getCurrentPlayer().getCoins() == COINS_TO_WIN;
     }
 
     private void giveNextPlayerTurn() {
-        currentPlayer++;
-        if (currentPlayer == playersOld.size()) currentPlayer = 0;
-
         players.giveNextPlayerTurn();
     }
 
