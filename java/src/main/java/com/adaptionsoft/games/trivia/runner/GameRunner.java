@@ -12,6 +12,7 @@ import com.adaptionsoft.games.uglytrivia.Game;
 
 public class GameRunner {
 
+    public static final int COINS_TO_WIN = 6;
     private static boolean hasWon;
 
     public static void main(String[] args) {
@@ -21,7 +22,7 @@ public class GameRunner {
         aGame.addPlayer("Pat");
         aGame.addPlayer("Sue");
 
-        aGame.addWinningRule(new WinningRuleByCoins());
+        aGame.addWinningRule(new WinningRuleByCoins(COINS_TO_WIN));
 
         Random rand = new Random();
         if (args.length > 0) {
