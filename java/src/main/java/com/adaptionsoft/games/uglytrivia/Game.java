@@ -44,7 +44,7 @@ public class Game {
         System.out.println(players.getCurrentPlayer().getName() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
-        if (board.isInPenaltyBox(players.getCurrentPlayer())) {
+        if (isCurrentPlayerInPenaltyBox()) {
             if (roll % 2 != 0) {
                 isGettingOutOfPenaltyBox = true;
 
@@ -99,7 +99,7 @@ public class Game {
     }
 
     public boolean wasCorrectlyAnswered() {
-        if (board.isInPenaltyBox(players.getCurrentPlayer()) && !isGettingOutOfPenaltyBox) {
+        if (isCurrentPlayerInPenaltyBox() && !isGettingOutOfPenaltyBox) {
             giveNextPlayerTurn();
             return true;
         } else {
@@ -138,5 +138,9 @@ public class Game {
 
     private void moveCurrentPlayerToPenaltyBox() {
         board.moveToPenalizeBox(players.getCurrentPlayer());
+    }
+
+    private boolean isCurrentPlayerInPenaltyBox() {
+        return board.isInPenaltyBox(players.getCurrentPlayer());
     }
 }
